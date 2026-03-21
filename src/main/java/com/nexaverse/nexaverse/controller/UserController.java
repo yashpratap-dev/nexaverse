@@ -5,6 +5,7 @@ import com.nexaverse.nexaverse.dto.UserDTO;
 import com.nexaverse.nexaverse.entity.User;
 import com.nexaverse.nexaverse.repository.UserRepository;
 import com.nexaverse.nexaverse.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Users", description = "User management APIs")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

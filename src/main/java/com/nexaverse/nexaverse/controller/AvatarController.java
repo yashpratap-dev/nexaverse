@@ -3,6 +3,7 @@ package com.nexaverse.nexaverse.controller;
 import com.nexaverse.nexaverse.dto.ApiResponse;
 import com.nexaverse.nexaverse.dto.AvatarDTO;
 import com.nexaverse.nexaverse.service.AvatarService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "Avatars", description = "Avatar management APIs")
 @RestController
 @RequestMapping("/api/avatars")
 @RequiredArgsConstructor

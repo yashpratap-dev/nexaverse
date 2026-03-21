@@ -3,12 +3,14 @@ package com.nexaverse.nexaverse.controller;
 import com.nexaverse.nexaverse.dto.ApiResponse;
 import com.nexaverse.nexaverse.entity.Avatar;
 import com.nexaverse.nexaverse.service.WorldJoinService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "World Join", description = "Avatar join/leave world APIs")
 @RestController
 @RequestMapping("/api/worlds")
 @RequiredArgsConstructor
