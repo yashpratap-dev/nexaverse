@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/avatars")
@@ -19,9 +20,16 @@ public class AvatarController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createAvatar(@Valid @RequestBody AvatarDTO dto) {
+        var avatar = avatarService.createAvatar(dto);
+        Map<String, Object> result = Map.of(
+                "avatarId", avatar.getId(),
+                "avatarName", avatar.getName(),
+                "avatarType", avatar.getAvatarType(),
+                "level", avatar.getLevel()
+        );
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Avatar created!", avatarService.createAvatar(dto)));
+                .body(ApiResponse.success("Avatar created!", result));
     }
 
     @GetMapping
@@ -37,12 +45,19 @@ public class AvatarController {
     }
 
     @PatchMapping("/{id}/move")
-    public ResponseEntity<ApiResponse<?>> moveAvatar(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> moveAvatar(
             @PathVariable Long id,
             @RequestParam double x,
             @RequestParam double y) {
-        return ResponseEntity.ok(
-                ApiResponse.success("Avatar moved!", avatarService.moveAvatar(id, x, y)));
+        var avatar = avatarService.moveAvatar(id, x, y);
+        Map<String, Object> result = Map.of(
+                "avatarId", avatar.getId(),
+                "avatarName", avatar.getName(),
+                "positionX", avatar.getPositionX(),
+                "positionY", avatar.getPositionY(),
+                "status", "MOVED"
+        );
+        return ResponseEntity.ok(ApiResponse.success("Avatar moved!", result));
     }
 
     @DeleteMapping("/{id}")
