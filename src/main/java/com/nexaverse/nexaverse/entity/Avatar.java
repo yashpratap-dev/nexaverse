@@ -25,15 +25,17 @@ public abstract class Avatar {
     private double positionX = 0.0;
     private double positionY = 0.0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User owner;
 
-    // Abstract methods — subclass implement karenge
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "world_id")
+    private WorldRoomEntity currentWorld;
+
     public abstract String getSpecialAbility();
     public abstract int getAttackPower();
 
-    // Common method — sab avatars ke liye
     public void moveToPosition(double x, double y) {
         this.positionX = x;
         this.positionY = y;
