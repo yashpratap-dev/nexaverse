@@ -35,4 +35,9 @@ public class WorldEventProducer {
         kafkaTemplate.send("avatar-events", message);
         log.info("Avatar move event sent: {}", message);
     }
+
+    public void sendChatEvent(String message) {
+        kafkaTemplate.send("chat-events", message);
+        log.info("Chat event sent: {}", message);
+    }
 }
