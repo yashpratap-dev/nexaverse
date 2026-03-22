@@ -1,51 +1,57 @@
 # NexaVerse 🌐
 
-AI-Powered Metaverse Social Platform built with Java 25 + Spring Boot 3.5
+AI-Powered Metaverse Platform Backend
 
 ## Tech Stack
-- **Backend**: Java 25, Spring Boot 3.5
+- **Backend**: Java 25 + Spring Boot 3.5.11
 - **Database**: PostgreSQL 17
-- **ORM**: Hibernate + Spring Data JPA
-- **Real-time**: WebSocket (coming Week 5)
-- **AI**: Spring AI + RAG (coming Week 8)
+- **Cache**: Redis
+- **Messaging**: Apache Kafka
+- **Real-time**: WebSocket (STOMP)
+- **AI**: Groq API (Llama 3.3-70b) — Free
+- **Security**: JWT + BCrypt + Spring Security
+- **Docs**: Swagger UI
 
-## Features Built
-- User entity with JPA
-- Avatar system — HumanAvatar + BotAvatar (OOP)
-- BFS Pathfinding algorithm (DSA)
-- System monitoring API (Linux metrics)
-- Virtual Threads enabled (Java 21 Loom)
+## Features
+- 🔐 JWT Authentication + BCrypt
+- 🌍 Virtual World Management
+- 👤 Avatar System (20+ types planned)
+- ⚡ Real-time Movement (WebSocket + Kafka)
+- 💬 Real-time Chat System
+- 🤖 AI Companions — MIMIR & GUANYIN
+- ⚔️ AI Quest Generator
+- 🎤 Voice Command Processing
+- 🔍 Semantic World Search + Recommendations
+- 📊 Redis Caching
+- 📨 Kafka Event Pipeline
+- 🛡️ Rate Limiting (100 req/min)
+- 📝 Structured Logging
 
-## API Endpoints
-| Endpoint | Description |
-|---|---|
-| GET /hello | Health check |
-| GET /api/test/all | Java 21 features |
-| GET /api/oop/avatars | Avatar system |
-| GET /api/oop/pathfinding | BFS pathfinding |
-| GET /api/monitor/system | Live system metrics |
+## Run with Docker
+```bash
+docker-compose up -d
+```
 
-## Setup
+## API Docs
+```
+localhost:8080/swagger-ui/index.html
+```
+
+## Setup (Local)
 1. Clone: `git clone https://github.com/yashpratap-dev/nexaverse.git`
-2. Copy `application.properties.example` → `application.properties`
-3. Fill in your DB credentials
+2. Add `application.properties` with your DB + Groq API key
+3. Start Redis + Kafka
 4. Run: `./mvnw spring-boot:run`
-5. Open: `localhost:8080/hello`
-
-## Project Structure
-```
-src/main/java/com/nexaverse/nexaverse/
-├── controller/   — REST APIs
-├── entity/       — JPA entities
-├── model/        — Java 21 Records + Sealed classes
-├── service/      — Business logic
-└── repository/   — DB operations
-```
 
 ## Roadmap
-- [x] Week 1 — Setup + Java 21 + OOP + DSA
-- [ ] Week 2 — REST APIs + Validation
-- [ ] Week 3 — JWT Auth
-- [ ] Week 5 — WebSocket Real-time
-- [ ] Week 8 — Spring AI + RAG
-- [ ] Week 12 — Deploy
+- [x] Week 1 — Java 25 + OOP + DSA + Setup
+- [x] Week 2 — REST APIs + JWT + Security
+- [x] Week 3 — Redis + Kafka + WebSocket
+- [x] Week 4 — AI Companions + Quest + Voice
+- [x] Week 5 — Testing + Rate Limiting + Docker
+- [ ] Week 6 — Deploy (Railway/Render)
+- [ ] Week 7 — React Frontend (Apple-level UI)
+- [ ] Week 8 — 3D Avatars (Three.js + Mixamo)
+- [ ] Week 9 — Fighting Arena (PvP)
+- [ ] Week 10 — Voice AI Commands
+- [ ] Week 12 — Final Deploy + Portfolio
