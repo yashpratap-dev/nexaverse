@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NexaVerse WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body { font-family: Arial; background: #1a1a2e; color: #eee; padding: 20px; }
+        button { background: #e94560; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 5px; }
+        #log { background: #16213e; padding: 15px; height: 300px; overflow-y: auto; border-radius: 8px; margin-top: 10px; }
+        .success { color: #0f3460; background: #00ff88; padding: 3px 8px; border-radius: 3px; margin: 2px 0; display: block; }
+        .event { color: #00d4ff; margin: 2px 0; display: block; }
+    </style>
+</head>
+<body>
+<h1>🌐 NexaVerse WebSocket Test</h1>
+<button onclick="connect()">Connect</button>
+<button onclick="disconnect()">Disconnect</button>
+<button onclick="joinWorld()">Join World 1</button>
+<button onclick="moveAvatar()">Move Avatar</button>
+<button onclick="sendChat()">Send Chat</button>
+<div id="log"></div>
+
+<script>
+    var stompClient = null;
+
+    function log(msg, type) {
+        var div = document.getElementById('log');
+        div.innerHTML += '<span class="' + (type||'event') + '">' + new Date().toLocaleTimeString() + ' - ' + msg + '</span>';
+        div.scrollTop = div.scrollHeight;
+    }
+
+    function connect() {
+        var socket = new SockJS('http://localhost:8080/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            log('Connected! ' + frame, 'success');
+            stompClient.subscribe('/topic/world/1', function(msg) {
+                log('RECEIVED: ' + msg.body, 'success');
+            });
+            stompClient.subscribe('/topic/world/1/chat', function(msg) {
+                log('CHAT: ' + msg.body, 'success');
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient) stompClient.disconnect();
+        log('Disconnected');
+    }
+
+    function joinWorld() {
+        stompClient.send("/app/avatar.join", {}, JSON.stringify({
+            avatarId: 1, avatarName: "DragonSlayer", worldId: 1
+        }));
+        log('Join world sent');
+    }
+
+    function moveAvatar() {
+        stompClient.send("/app/avatar.move", {}, JSON.stringify({
+            avatarId: 1, avatarName: "DragonSlayer", worldId: 1,
+            positionX: Math.random() * 100, positionY: Math.random() * 100
+        }));
+        log('Move sent');
+    }
+
+    function sendChat() {
+        stompClient.send("/app/chat.send", {}, JSON.stringify({
+            avatarId: 1, avatarName: "DragonSlayer", worldId: 1,
+            content: "Hello NexaVerse! 🔥"
+        }));
+        log('Chat sent');
+    }
+</script>
+</body>
+</html>
