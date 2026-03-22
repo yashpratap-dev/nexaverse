@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WorldJoinService {
-
+    private final WorldEventProducer worldEventProducer;
     private final AvatarRepository avatarRepository;
     private final WorldRepository worldRepository;
 
@@ -43,6 +43,7 @@ public class WorldJoinService {
         avatar.setCurrentWorld(world);
         world.setCurrentPlayers(world.getCurrentPlayers() + 1);
         worldRepository.save(world);
+        worldEventProducer.sendWorldJoinEvent(avatarId, worldId);
         return avatarRepository.save(avatar);
     }
 
@@ -56,12 +57,14 @@ public class WorldJoinService {
         }
 
         WorldRoomEntity world = avatar.getCurrentWorld();
+        Long worldId = world.getId(); // ← pehle ID save karo
         world.setCurrentPlayers(Math.max(0, world.getCurrentPlayers() - 1));
         worldRepository.save(world);
 
         avatar.setCurrentWorld(null);
         avatar.setPositionX(0.0);
         avatar.setPositionY(0.0);
+        worldEventProducer.sendWorldLeaveEvent(avatarId, worldId); // ← saved ID use karo
         return avatarRepository.save(avatar);
     }
 
