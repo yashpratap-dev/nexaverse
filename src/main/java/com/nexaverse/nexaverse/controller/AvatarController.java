@@ -2,6 +2,7 @@ package com.nexaverse.nexaverse.controller;
 
 import com.nexaverse.nexaverse.dto.ApiResponse;
 import com.nexaverse.nexaverse.dto.AvatarDTO;
+import com.nexaverse.nexaverse.service.AvatarMovementService;
 import com.nexaverse.nexaverse.service.AvatarService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class AvatarController {
 
     private final AvatarService avatarService;
+    private final AvatarMovementService avatarMovementService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createAvatar(@Valid @RequestBody AvatarDTO dto) {
@@ -51,13 +53,13 @@ public class AvatarController {
             @PathVariable Long id,
             @RequestParam double x,
             @RequestParam double y) {
-        var avatar = avatarService.moveAvatar(id, x, y);
+        avatarMovementService.moveAvatar(id, x, y);
         Map<String, Object> result = Map.of(
-                "avatarId", avatar.getId(),
-                "avatarName", avatar.getName(),
-                "positionX", avatar.getPositionX(),
-                "positionY", avatar.getPositionY(),
-                "status", "MOVED"
+                "avatarId", id,
+                "positionX", x,
+                "positionY", y,
+                "status", "MOVED",
+                "realtime", "broadcast sent"
         );
         return ResponseEntity.ok(ApiResponse.success("Avatar moved!", result));
     }
