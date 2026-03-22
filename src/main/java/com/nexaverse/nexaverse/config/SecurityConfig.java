@@ -30,13 +30,15 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/api/auth/**", "/hello", "/api/test/**",
-                                        "/api/oop/**", "/api/monitor/**",
-                                        "/api/worlds/**", "/api/avatars/**",
-                                        "/swagger-ui/**", "/api-docs/**",
-                                        "/swagger-ui.html", "/v3/api-docs/**",
-                                        "/ws/**", "/ws",
-                                        "/*.html", "/static/**", "/api/chat/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/hello", "/api/test/**",
+                                "/api/oop/**", "/api/monitor/**",
+                                "/api/worlds/**", "/api/avatars/**",
+                                "/swagger-ui/**", "/api-docs/**",
+                                "/swagger-ui.html", "/v3/api-docs/**",
+                                "/ws/**", "/ws",
+                                "/*.html", "/static/**",
+                                "/api/chat/**", "/api/ai/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
