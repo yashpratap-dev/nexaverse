@@ -1,13 +1,16 @@
 package com.nexaverse.nexaverse.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "world_rooms")
 @Data
-public class WorldRoomEntity {
+public class WorldRoomEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +20,13 @@ public class WorldRoomEntity {
     private String name;
 
     @Column(nullable = false)
-    private String worldType; // FOREST, CITY, SPACE
+    private String worldType;
 
     private int maxPlayers = 50;
     private int currentPlayers = 0;
     private boolean active = true;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }
