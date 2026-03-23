@@ -2,6 +2,7 @@ package com.nexaverse.nexaverse.repository;
 
 import com.nexaverse.nexaverse.entity.WorldRoomEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +13,10 @@ public interface WorldRepository extends JpaRepository<WorldRoomEntity, Long> {
     List<WorldRoomEntity> findByWorldType(String worldType);
     List<WorldRoomEntity> findByActiveTrue();
     boolean existsByName(String name);
+
+    @Query("SELECT w FROM WorldRoomEntity w WHERE w.active = true AND w.currentPlayers < w.maxPlayers")
+    List<WorldRoomEntity> findAvailableWorlds();
+
+    @Query("SELECT w FROM WorldRoomEntity w ORDER BY w.currentPlayers DESC")
+    List<WorldRoomEntity> findAllOrderByPlayersDesc();
 }

@@ -7,8 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name = "avatars", indexes = {
+        @Index(name = "idx_avatar_user", columnList = "user_id"),
+        @Index(name = "idx_avatar_world", columnList = "world_id")
+})
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "avatars")
 public abstract class Avatar {
 
     @Id
@@ -25,9 +28,10 @@ public abstract class Avatar {
     private double positionX = 0.0;
     private double positionY = 0.0;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User owner;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "world_id")

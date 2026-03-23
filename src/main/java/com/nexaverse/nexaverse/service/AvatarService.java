@@ -22,7 +22,7 @@ public class AvatarService {
         User owner = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + dto.getUserId()));
 
-        if (avatarRepository.existsByNameAndOwnerId(dto.getName(), dto.getUserId())) {
+        if (avatarRepository.existsByNameAndUser_Id(dto.getName(), dto.getUserId())) {
             throw new DuplicateResourceException("Avatar name already exists for this user!");
         }
 
@@ -32,7 +32,7 @@ public class AvatarService {
         avatar.setLevel(dto.getLevel());
         avatar.setPositionX(dto.getPositionX());
         avatar.setPositionY(dto.getPositionY());
-        avatar.setOwner(owner);
+        avatar.setUser(owner);
         avatar.setWeaponType("SWORD");
 
         return (HumanAvatar) avatarRepository.save(avatar);
@@ -43,7 +43,7 @@ public class AvatarService {
     }
 
     public List<?> getAvatarsByUser(Long userId) {
-        return avatarRepository.findByOwnerId(userId);
+        return avatarRepository.findByUser_Id(userId);
     }
 
     public HumanAvatar moveAvatar(Long id, double x, double y) {

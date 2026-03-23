@@ -71,6 +71,6 @@ public class WorldJoinService {
     public List<Avatar> getPlayersInWorld(Long worldId) {
         worldRepository.findById(worldId)
                 .orElseThrow(() -> new ResourceNotFoundException("World not found: " + worldId));
-        return avatarRepository.findByCurrentWorldId(worldId);
+        return avatarRepository.findByCurrentWorld_Id(worldId);
     }
 }

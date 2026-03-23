@@ -1,5 +1,4 @@
 package com.nexaverse.nexaverse.entity;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
@@ -8,7 +7,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "world_rooms")
+@Table(name = "world_rooms", indexes = {
+        @Index(name = "idx_world_active", columnList = "active"),
+        @Index(name = "idx_world_type", columnList = "worldType")
+})
 @Data
 public class WorldRoomEntity implements Serializable {
 

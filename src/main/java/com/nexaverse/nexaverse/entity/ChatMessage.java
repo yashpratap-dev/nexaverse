@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_messages")
+@Table(name = "chat_messages", indexes = {
+        @Index(name = "idx_chat_world", columnList = "worldId"),
+        @Index(name = "idx_chat_sent", columnList = "sentAt")
+})
 @Data
 public class ChatMessage implements Serializable {
 
