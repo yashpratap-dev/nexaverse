@@ -1,5 +1,6 @@
 package com.nexaverse.nexaverse.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,10 +32,12 @@ public abstract class Avatar {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "world_id")
+    @JsonIgnore
     private WorldRoomEntity currentWorld;
 
     public abstract String getSpecialAbility();
