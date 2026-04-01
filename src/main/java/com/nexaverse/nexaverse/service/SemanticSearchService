@@ -1,0 +1,82 @@
+package com.nexaverse.nexaverse.service;
+
+import com.nexaverse.nexaverse.entity.WorldRoomEntity;
+import com.nexaverse.nexaverse.repository.WorldRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class SemanticSearchService {
+
+    private final WorldRepository worldRepository;
+
+    // Keyword map for semantic matching
+    private static final Map<String, List<String>> SEMANTIC_MAP = Map.of(
+        "dark",     List.of("DUNGEON", "FOREST", "CITY"),
+        "bright",   List.of("DESERT", "OCEAN"),
+        "scary",    List.of("DUNGEON"),
+        "peaceful", List.of("FOREST", "OCEAN"),
+        "nature",   List.of("FOREST", "OCEAN"),
+        "urban",    List.of("CITY"),
+        "water",    List.of("OCEAN"),
+        "sand",     List.of("DESERT"),
+        "magic",    List.of("DUNGEON", "FOREST"),
+        "adventure",List.of("DUNGEON", "DESERT", "FOREST")
+    );
+
+    public List<WorldRoomEntity> semanticSearch(String query) {
+        if (query == null || query.isBlank()) {
+            return worldRepository.findAll();
+        }
+
+        String lowerQuery = query.toLowerCase().trim();
+        log.info("Semantic search query: {}", lowerQuery);
+
+        // Score each world based on query keywords
+        List<WorldRoomEntity> allWorlds = worldRepository.findAll();
+        Map<WorldRoomEntity, Integer> scores = new HashMap<>();
+
+        for (WorldRoomEntity world : allWorlds) {
+            int score = 0;
+
+            // Direct name match
+            if (world.getName().toLowerCase().contains(lowerQuery)) score += 10;
+
+            // World type match
+            if (world.getWorldType() != null &&
+                world.getWorldType().toLowerCase().contains(lowerQuery)) score += 8;
+
+            // Semantic keyword matching
+            String[] words = lowerQuery.split("\\s+");
+            for (String word : words) {
+                List<String> matchedTypes = SEMANTIC_MAP.getOrDefault(word, List.of());
+                if (matchedTypes.contains(world.getWorldType())) score += 5;
+            }
+
+            scores.put(world, score);
+        }
+
+        // Sort by score descending
+        return allWorlds.stream()
+            .filter(w -> scores.getOrDefault(w, 0) > 0 || query.isBlank())
+            .sorted((a, b) -> scores.getOrDefault(b, 0) - scores.getOrDefault(a, 0))
+            .collect(Collectors.toList());
+    }
+
+    public List<WorldRoomEntity> findSimilarWorlds(Long worldId) {
+        Optional<WorldRoomEntity> target = worldRepository.findById(worldId);
+        if (target.isEmpty()) return List.of();
+
+        String targetType = target.get().getWorldType();
+        return worldRepository.findAll().stream()
+            .filter(w -> !w.getId().equals(worldId))
+            .filter(w -> w.getWorldType() != null && w.getWorldType().equals(targetType))
+            .collect(Collectors.toList());
+    }
+}

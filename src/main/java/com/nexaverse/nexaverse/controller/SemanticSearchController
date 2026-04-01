@@ -1,0 +1,43 @@
+package com.nexaverse.nexaverse.controller;
+
+import com.nexaverse.nexaverse.dto.ApiResponse;
+import com.nexaverse.nexaverse.entity.WorldRoomEntity;
+import com.nexaverse.nexaverse.service.SemanticSearchService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/search")
+@RequiredArgsConstructor
+@Tag(name = "Semantic Search", description = "AI-powered world search")
+public class SemanticSearchController {
+
+    private final SemanticSearchService semanticSearchService;
+
+    @GetMapping("/worlds")
+    public ResponseEntity<ApiResponse<List<WorldRoomEntity>>> searchWorlds(
+            @RequestParam(defaultValue = "") String query) {
+        List<WorldRoomEntity> results = semanticSearchService.semanticSearch(query);
+        return ResponseEntity.ok(ApiResponse.success(
+            "Search results for: " + query, results));
+    }
+
+    @GetMapping("/worlds/{worldId}/similar")
+    public ResponseEntity<ApiResponse<List<WorldRoomEntity>>> similarWorlds(
+            @PathVariable Long worldId) {
+        List<WorldRoomEntity> results = semanticSearchService.findSimilarWorlds(worldId);
+        return ResponseEntity.ok(ApiResponse.success("Similar worlds found!", results));
+    }
+}
+```
+
+---
+
+Backend restart karo → Postman mein test karo:
+```
+GET http://localhost:8080/api/search/worlds?query=dark
+Authorization: Bearer <token>
