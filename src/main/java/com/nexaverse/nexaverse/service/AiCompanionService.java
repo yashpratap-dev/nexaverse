@@ -18,7 +18,7 @@ public class AiCompanionService {
     private final AiCompanionRepository aiCompanionRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${groq.api.key}")
+    @Value("${GROQ_API_KEY}")
     private String groqApiKey;
 
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
