@@ -1,18 +1,21 @@
 package com.nexaverse.nexaverse.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@ConditionalOnBean(KafkaTemplate.class)
 public class WorldEventProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired(required = false)
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendWorldJoinEvent(Long avatarId, Long worldId) {
+        if (kafkaTemplate == null) return;
         String message = String.format(
                 "{\"event\":\"WORLD_JOIN\",\"avatarId\":%d,\"worldId\":%d}",
                 avatarId, worldId);
@@ -21,6 +24,7 @@ public class WorldEventProducer {
     }
 
     public void sendWorldLeaveEvent(Long avatarId, Long worldId) {
+        if (kafkaTemplate == null) return;
         String message = String.format(
                 "{\"event\":\"WORLD_LEAVE\",\"avatarId\":%d,\"worldId\":%d}",
                 avatarId, worldId);
@@ -29,6 +33,7 @@ public class WorldEventProducer {
     }
 
     public void sendAvatarMoveEvent(Long avatarId, double x, double y) {
+        if (kafkaTemplate == null) return;
         String message = String.format(
                 "{\"event\":\"AVATAR_MOVE\",\"avatarId\":%d,\"x\":%.1f,\"y\":%.1f}",
                 avatarId, x, y);
@@ -37,6 +42,7 @@ public class WorldEventProducer {
     }
 
     public void sendChatEvent(String message) {
+        if (kafkaTemplate == null) return;
         kafkaTemplate.send("chat-events", message);
         log.info("Chat event sent: {}", message);
     }
