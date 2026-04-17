@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://nexaverse-backend.onrender.com'
+  baseURL: 'https://nexaverse-backend.onrender.com',
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -28,5 +28,3 @@ api.interceptors.response.use(
 )
 
 export default api
-
-
